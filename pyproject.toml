@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pancreas-boundary-attention"
+version = "0.1.0"
+description = "3D pancreas Attention U-Net with a supervised boundary encoder"
+requires-python = ">=3.10"
+dependencies = [
+  "torch>=2.4,<3",
+  "monai>=1.4,<1.6",
+  "nibabel>=5.2,<6",
+  "numpy>=1.26,<3",
+  "scipy>=1.12,<2",
+  "PyYAML>=6,<7",
+  "tqdm>=4.66,<5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "matplotlib>=3.8,<4"]
+notebook = ["ipykernel>=6,<8", "nbformat>=5,<6", "nbclient>=0.10,<1", "matplotlib>=3.8,<4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+

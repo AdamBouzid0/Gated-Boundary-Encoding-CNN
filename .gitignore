@@ -1,0 +1,40 @@
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+pytest-of-*/
+*.egg-info/
+
+# Local datasets, audit outputs and frozen splits are regenerated per checkout
+data/*
+!data/manifest.example.csv
+Totalsegmentator_dataset/
+MR-dataset/
+*.nii
+*.nii.gz
+*.zip
+*.torrent
+
+# Training outputs and model weights
+runs/
+*.pt
+*.pth
+*.ckpt
+*.log
+
+# Machine-specific verification reports
+verification/*
+!verification/README.md
+
+# Local editor settings and environment variables
+.vscode/
+.idea/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+

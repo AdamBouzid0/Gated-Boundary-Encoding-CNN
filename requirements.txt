@@ -1,0 +1,3 @@
+# Install the PyTorch build appropriate for your CUDA version first.
+-e .[dev]
+

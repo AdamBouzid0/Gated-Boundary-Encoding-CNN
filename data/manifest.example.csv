@@ -1,0 +1,4 @@
+case_id,patient_id,image,label,official_split
+s0001,s0001,../../Totalsegmentator_dataset/s0001/ct.nii.gz,../../Totalsegmentator_dataset/s0001/segmentations/pancreas.nii.gz,train
+s0032,s0032,../../Totalsegmentator_dataset/s0032/ct.nii.gz,../../Totalsegmentator_dataset/s0032/segmentations/pancreas.nii.gz,val
+s0013,s0013,../../Totalsegmentator_dataset/s0013/ct.nii.gz,../../Totalsegmentator_dataset/s0013/segmentations/pancreas.nii.gz,test

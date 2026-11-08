@@ -1,0 +1,59 @@
+# TotalSegmentator v1 pancreas cohort; see data/totalsegmentator_filter/summary.json.
+# Starting training settings, not validated hyperparameters.
+seed: 42
+data:
+  manifest: data/totalsegmentator_filter/manifest.csv
+  splits: data/totalsegmentator_filter/splits_official.json
+  expected_cases: 795     # retained nonempty cohort from the local audit
+  pancreas_label_ids: [1] # separate-organ pancreas masks audited as binary 0/1
+  target_spacing_mm: null # downloaded volumes are already approximately 1.5 mm isotropic
+  spacing_unit_if_unknown: mm # explicit interpretation: unset units, release CT scale
+  grid_tolerance_voxels: 0.25 # accept measured small header differences; source files unchanged
+  intensity_clip: [-200, 400] # initial CT window from training-case inspection, then per-volume z-score
+  patch_size: [96, 96, 96]
+  boundary_halo: 1        # one neighbour for erosion; temporary crop is 98^3 without spatial augmentation
+  patches_per_case: 1
+  foreground_probability: 0.5
+  split_fractions: [0.8, 0.1, 0.1] # fallback only; official train/val/test labels take priority
+model:
+  variant: boundary_attention_unet
+  in_channels: 1
+  base_channels: 16
+  boundary_base_channels: 8
+  norm: batch               # matches upstream; group is also supported
+  attention_heads: 1        # 1: CT single-attention model; 2: multi-attention
+  attention_subsample: [2, 2, 2]
+  multiscale_output: true   # port of the upstream CT DSV output fusion
+augmentation:
+  affine_probability: 0.0  # augmentation omitted for the current experiment
+  rotation_degrees: 0.0
+  scale_fraction: 0.0
+  flip_axes: []
+  elastic_probability: 0.0
+  elastic_sigma_range: [4.0, 6.0]
+  elastic_magnitude_range: [20.0, 40.0]
+  noise_probability: 0.0
+  noise_std: 0.0
+loss:
+  dice_weight: 1.0
+  ce_weight: 0.0            # Dice-only segmentation objective by default
+  include_background: true
+  boundary_weight: 0.3      # lambda; select on validation data
+  boundary_pos_weight: 10.0 # weighted BCE for sparse boundary voxels
+training:
+  output_dir: runs
+  epochs: 50
+  batch_size: 1
+  accumulation_steps: 2
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  grad_clip: 5.0
+  num_workers: 2
+  cpu_threads: 4
+  amp: true                # active only on CUDA
+  validate_every: 5        # full volumes, not random validation crops
+evaluation:
+  sliding_window_batch_size: 1
+  overlap: 0.5
+  boundary_tolerance_mm: 2.0
+
